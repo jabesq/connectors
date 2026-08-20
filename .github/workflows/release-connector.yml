@@ -502,7 +502,7 @@ jobs:
           if [ ! -f "$MANIFEST" ]; then
             echo "patched=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ Manifest not found: $MANIFEST — skipping version patch"
-            exit 0
+            exit 1
           fi
 
           jq --arg v "$VERSION" '.container_version = $v' "$MANIFEST" > "$RUNNER_TEMP/manifest.json" \
@@ -528,7 +528,7 @@ jobs:
 
           if [ ! -f "$MANIFEST" ]; then
             echo "::warning::Manifest not found for ${CONNECTOR_DIR} — skipping fragment generation"
-            exit 0
+            exit 1
           fi
 
           pip install --quiet -r shared/tools/composer/generate_manifest_fragment/requirements.txt
@@ -555,7 +555,7 @@ jobs:
 
           if [ -z "$XTM_HUB_TOKEN" ]; then
             echo "::warning::XTM_HUB_TOKEN secret not set -- skipping XTM Hub publish"
-            exit 0
+            exit 1
           fi
 
           QUERY='mutation IngestManifestFragments($manifestFragments: [ManifestFragmentInput!]!) {
@@ -587,12 +587,12 @@ jobs:
 
           if [ "$HTTP_STATUS" -ge 400 ]; then
             echo "::warning::XTM Hub publish failed with HTTP $HTTP_STATUS"
-            exit 0
+            exit 1
           fi
 
           if echo "$RESPONSE" | jq -e '.errors' >/dev/null 2>&1; then
             echo "::warning::XTM Hub returned errors: $(echo "$RESPONSE" | jq -c '.errors')"
-            exit 0
+            exit 1
           fi
 
           SUCCESS=$(echo "$RESPONSE" | jq -r '.data.ingestManifestFragments.success // false')
@@ -730,7 +730,7 @@ jobs:
 
           if [ ! -f "$MANIFEST" ]; then
             echo "⚠️ Manifest not found: $MANIFEST — skipping"
-            exit 0
+            exit 1
           fi
 
           # Patch container_version
