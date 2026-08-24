@@ -76,7 +76,9 @@ CONNECTORS_SDK_PYPROJECT = (
 # Matches a pinned `pycti==X.Y.Z` requirement, whether as a plain
 # requirements.txt line or a quoted `pyproject.toml` dependencies-array entry
 # (e.g. `"pycti==X.Y.Z",`). Optional extras (`pycti[extra]==`) are handled.
-PYCTI_PIN_PATTERN = re.compile(r"\bpycti(?:\[[^\]]*\])?\s*==\s*['\"]?([^\s'\";,]+)")
+PYCTI_PIN_PATTERN = re.compile(
+    r"^\bpycti(?:\[[^\]]*\])?\s*==\s*['\"]?([^\s'\";,]+)$", re.MULTILINE
+)
 
 PLATFORM = "OpenCTI"
 INTEGRATION_TYPE = "connector"
