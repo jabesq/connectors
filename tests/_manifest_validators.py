@@ -6,8 +6,8 @@ We intentionally use simple predicate functions instead of a dataclass / Pydanti
 - enforce strict checks with no accidental type casting or implicit defaults
 """
 
-from datetime import date
 from typing import Any
+from datetime import date
 
 VALID_USE_CASES = {
     "Adversary & Campaign Insights",
